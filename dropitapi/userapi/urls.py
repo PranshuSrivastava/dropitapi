@@ -1,22 +1,16 @@
-# from django.conf.urls import url, include
-# from rest_framework import routers
-# from api.views import UserViewSet
-
-# # router = routers.DefaultRouter()
-# # router.register('users', UserViewSet)
-
-# urlpatterns = [
-#     url('register/', include(router.urls)),
-# ]
-
-
 from django.conf.urls import url, include
 from rest_framework import routers
-from .views import UserViewSet
-
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+from django.urls import path 
+from . import views
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    # url(r'^', include(router.urls)),
+    path('user-list', views.get_user_list, name="user_list"),
+    path('user-details/<str:pk>/', views.get_user_details, name="user_details"),
+    path('user-profile-details/<str:pk>/', views.get_user_profile, name="get_user_profile"),
+    path('set-user-profile/', views.set_user_profile, name="set_user_profile"),
+    path('dropper-profile/<str:pk>/', views.get_dropper_profile, name="dropper_profile"),
+    path('set-dropper-profile/', views.set_dropper_profile, name="set_dropper_profile"),
 ]
+
+
