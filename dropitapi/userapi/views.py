@@ -1,9 +1,10 @@
 from rest_framework import viewsets, status
-from .models import User, DropperProfile, UserProfile
-from .serializers import UserSerializer , UserProfileSerializer , DropperProfileSerializer
+from .models import User, DropperProfile, UserProfile, OrdersModel
+from .serializers import UserSerializer , UserProfileSerializer , DropperProfileSerializer, OrderSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from django.shortcuts import render
 
 
 #userlist method to view all users at once with options as get and post
@@ -88,10 +89,6 @@ def set_user_profile(request):
             return Response(serializer.errors)
 
 
-
-
-
-
 #_profile method to view, put, delete specific user's profile details
 @api_view(['GET', 'PUT', 'DELETE','POST'])
 def get_dropper_profile(request, pk):
@@ -138,73 +135,86 @@ def set_dropper_profile(request):
 
 
 
+#Order_list_view method to view all users at once with options as get and post
+@api_view(['GET', 'POST'])
+def get_order_list(request):
+    if request.method == 'GET':
+        orders = OrdersModel.objects.all()
+        serializer = OrderSerializer(orders,many = True)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        serializer  = OrderSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+#orderdetails method to view, put, delete specific orders
+@api_view(['GET', 'PUT', 'DELETE','POST'])
+def get_order_details(request, pk):
+    orders = OrdersModel.objects.get(pk = pk)
+    if request.method == 'GET':
+        serializer = OrderSerializer(orders)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = OrderSerializer(orders, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    if request.method == 'DELETE':
+        orders.delete()
+        return Response(status = status.HTTP_204_NO_CONTENT)
+
+
+
+
+# import pyrebase
+# import os
+# from django.core.files.storage import default_storage
+# from django.contrib import messages
+# from django.shortcuts import render, redirect
+
+
+
+# config = {
+#     "apiKey": "AIzaSyBnu-tyVi3ST-26ML0o4a6qvu4pmoQ66Kc",
+#     "authDomain": "dropit-7a619.firebaseapp.com",
+#     "projectId": "dropit-7a619",
+#     "storageBucket": "dropit-7a619.appspot.com",
+#     "messagingSenderId": "493453517133",
+#     "appId": "1:493453517133:web:60bae94121607759511704",
+#     "measurementId": "G-Y6X0FW2976",
+#     "databaseURL": ""
+# }
+
+# firebase = pyrebase.initialize_app(config)
+# storage = firebase.storage()
+
+# PATH_ON_CLOUD = "images/profile_pics"
+# PATH_LOCAL = "C:/Users/jhaso/Desktop/Dropit/dropitapi/media/profile_pics/Untitled.png"
+
+# storage.child(PATH_ON_CLOUD).put(PATH_LOCAL)
+
+
+# def image_uploder(PATH_LOCAL,PATH_ON_CLOUD):
+#     storage.child(PATH_ON_CLOUD).put(PATH_LOCAL)
+
+
+#         # file = request.FILES['file']
+#         # file_save = default_storage.save(file.name, file)
+#         # storage.child("images/" + file.name).put("media/" + file.name)
+#         # delete = default_storage.delete(file.name)
 
 
 
 
 
 
+# ###############################################################################################################################
 
-
-
-
-
-###############################################################################################################################
-
-
-
-
-# class UserViewS ,et(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-
-
-
-# @api_view(['GET'])
-# def apioverview(request):
-#     api_urls = {
-#         'List':'/task-list/',
-#         'Detail View':'/task-detail/<str:pk>/',
-#         'Create':'/task-create/',
-#         'Update': '/task-update/<str:pk>/',
-#         'Delete': '/task-delete/<str:pk>',
-#     }
-#     return Response(api_urls)
-
-# @api_view(['GET'])
-# def taskList(request):
-#     tasks = Task.objects.all().order_by('-id')
-#     serializer = TaskSerializer(tasks,many=True)
-#     return Response(serializer.data)
-
-# @api_view(['GET'])
-# def taskDetail(request,pk):
-#     tasks = Task.objects.all(id=pk)
-#     serializer = TaskSerializer(tasks,many=False)
-#     return Response(serializer.data)
-
-# @api_view(['POST'])
-# def taskCreate(request):
-#     serializer = TaskSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-    
-#     return Response(serializer.data)
-
-# @api_view(['POST'])
-# def taskUpdate(request,pk):
-#     task = Task.objects.get(id=pk)
-#     serializer = TaskSerializer(instance=task,data=request.data)
-    
-#     if serializer.is_valid():
-#         serializer.save()
-    
-#     return Response(serializer.data)
-
-# @api_view(['DELETE'])
-# def taskDelete(request,pk):
-#     task = Task.objects.get(id=pk)
-#     task.delete()
-    
-#     return Response("Item successfully delete!")

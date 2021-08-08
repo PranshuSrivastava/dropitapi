@@ -1,7 +1,6 @@
-from .models import User, UserProfile ,DropperProfile
+from .models import User, UserProfile ,DropperProfile, OrdersModel
 from rest_framework  import serializers
 from django.contrib.auth import authenticate
-import json
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,8 +22,10 @@ class DropperProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
-
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrdersModel
+        fields = "__all__"
 
     # def create(self,validated_data):
     #     profile_data = validated_data.pop('profile')
