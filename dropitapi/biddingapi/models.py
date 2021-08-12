@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from datetime import datetime, timedelta
+import time
 User = settings.AUTH_USER_MODEL
 
 class AuctionManager(models.Manager):
@@ -20,14 +22,18 @@ class Auction(models.Model):
     active = models.BooleanField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.title
+class IsActiveManager(models.Manager):
+    def get_queryset(self):
+        return super(IsActiveManager, self).get_queryset().filter(active=True).order_by('-created_at')
 
-    def __unicode__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
-    objects = models.Manager()
-    AuctionManager = AuctionManager()
+    # def __unicode__(self):
+    #     return self.title
+
+    # objects = models.Manager()
+    # AuctionManager = AuctionManager()
 
 
 class BidManager(models.Manager):
@@ -40,8 +46,6 @@ class Bid(models.Model):
     value = models.FloatField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    email_sent = models.BooleanField(default=False)
-    email_sent_time = models.DateTimeField(blank=True, null=True)
     
     def __str__(self):
         return "{0} - {1}".format(self.auction, self.value)
@@ -50,14 +54,3 @@ class Bid(models.Model):
     BidManager = BidManager()
 
     
-class EmailManager(models.Manager):
-    def emails(self):
-        return super().get_queryset().order_by('-created_at')
-
-class EmailQueue(models.Model):
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, blank=True, null=True)
-    bid = models.ForeignKey(Bid,on_delete=models.CASCADE, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    objects = models.Manager()
-    EmailManager = EmailManager()

@@ -20,14 +20,3 @@ admin.site.register(Auction, AuctionAdmin)
 admin.site.register(Bid, BidAdmin)
 
 
-class EmailAdmin(admin.ModelAdmin):
-    list_display = ['auction', 'email_to', 'created_at']
-    list_filter = (
-        ('auction',)
-    )
-
-    def email_to(self, obj):
-        return obj.owner.email
-
-
-admin.site.register(EmailQueue, EmailAdmin)

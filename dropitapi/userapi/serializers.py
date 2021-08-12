@@ -15,7 +15,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class DropperProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = DropperProfile
@@ -49,7 +48,3 @@ class OrderSerializer(serializers.ModelSerializer):
     #     profile.user_profile_photo = profile_data.get('user_profile_photo', profile.user_profile_photo)
     #     profile.save()
     #     return instance
-
-
-
-    

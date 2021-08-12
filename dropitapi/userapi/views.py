@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from django.shortcuts import render
-
+from django.views.decorators.cache import never_cache
 
 #userlist method to view all users at once with options as get and post
 @api_view(['GET', 'POST'])
+@never_cache
 def get_user_list(request):
     if request.method == 'GET':
         user = User.objects.all()
@@ -25,6 +26,7 @@ def get_user_list(request):
 
 #userdetails method to view, put, delete specific users
 @api_view(['GET', 'PUT', 'DELETE','POST'])
+@never_cache
 def get_user_details(request, pk):
     user = User.objects.get(pk = pk)
     if request.method == 'GET':
@@ -46,6 +48,7 @@ def get_user_details(request, pk):
 
 #user_profile method to view, put, delete specific user's profile details
 @api_view(['GET', 'PUT', 'DELETE','POST'])
+@never_cache
 def get_user_profile(request, pk):
     user_profile = UserProfile.objects.get(pk = pk)
     user = User.objects.get(pk = pk)
@@ -79,6 +82,7 @@ def get_user_profile(request, pk):
 
 #Set_user_profile function to post user profile data
 @api_view(['POST'])
+@never_cache
 def set_user_profile(request):
         if request.method == 'POST':
             serializer  = UserProfileSerializer(data = request.data)
@@ -91,6 +95,7 @@ def set_user_profile(request):
 
 #_profile method to view, put, delete specific user's profile details
 @api_view(['GET', 'PUT', 'DELETE','POST'])
+@never_cache
 def get_dropper_profile(request, pk):
     dropper_profile = DropperProfile.objects.get(pk = pk)
     user = User.objects.get(pk = pk)
@@ -123,6 +128,7 @@ def get_dropper_profile(request, pk):
 
 #Set_dropper_profile to post user profile data (posting data without primary key)
 @api_view(['POST'])
+@never_cache
 def set_dropper_profile(request):
         if request.method == 'POST':
             serializer  = DropperProfileSerializer(data = request.data)
@@ -137,6 +143,7 @@ def set_dropper_profile(request):
 
 #Order_list_view method to view all users at once with options as get and post
 @api_view(['GET', 'POST'])
+@never_cache
 def get_order_list(request):
     if request.method == 'GET':
         orders = OrdersModel.objects.all()
@@ -153,6 +160,7 @@ def get_order_list(request):
 
 #orderdetails method to view, put, delete specific orders
 @api_view(['GET', 'PUT', 'DELETE','POST'])
+@never_cache
 def get_order_details(request, pk):
     orders = OrdersModel.objects.get(pk = pk)
     if request.method == 'GET':
@@ -171,8 +179,9 @@ def get_order_details(request, pk):
         orders.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
 
-
-
+# @api_view(['GET'])
+# def Vehicle_type(request):
+    
 
 # import pyrebase
 # import os
@@ -211,10 +220,5 @@ def get_order_details(request, pk):
 #         # storage.child("images/" + file.name).put("media/" + file.name)
 #         # delete = default_storage.delete(file.name)
 
-
-
-
-
-
-# ###############################################################################################################################
+################################################################################################################################
 
