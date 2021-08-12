@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('update/', views.update_active, name="update_time"),
+    path('update_active_bidding_orders/', views.update_active_bidding_orders, name="update_time"),
     # path('update1/', views.update_active1, name="update_time"),
   
 
