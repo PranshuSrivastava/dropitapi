@@ -139,8 +139,6 @@ def set_dropper_profile(request):
             return Response(serializer.errors)
 
 
-
-
 #Order_list_view method to view all users at once with options as get and post
 @api_view(['GET', 'POST'])
 @never_cache

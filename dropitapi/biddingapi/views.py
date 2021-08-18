@@ -2,7 +2,7 @@ from .models import Auction
 from datetime import datetime, timedelta
 
 
-# # Create your views here.
+# Create your views here.
 def update_active_bidding_orders(request):
     current_time = datetime.now().time()
     current_date = datetime.now().date()
@@ -12,6 +12,6 @@ def update_active_bidding_orders(request):
             val.active =False
             val.save()
             print("done")
-        # expired_bid_ids.save()
-    print("############################################################################################################################################")
+        # expired_bid_ids.update()
+    print("########################################################################################################################################################")
     return 0

@@ -14,26 +14,15 @@ class AuctionManager(models.Manager):
 
 class Auction(models.Model):
     title = models.CharField(max_length=255)
-    current_bid = models.FloatField()
-    bid_count = models.IntegerField()
+    basic_fare = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    live_date = models.DateTimeField()
     expiry_date = models.DateTimeField()
     active = models.BooleanField()
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
 
-class IsActiveManager(models.Manager):
-    def get_queryset(self):
-        return super(IsActiveManager, self).get_queryset().filter(active=True).order_by('-created_at')
-
-    # def __str__(self):
-    #     return self.title
-
-    # def __unicode__(self):
-    #     return self.title
-
-    # objects = models.Manager()
-    # AuctionManager = AuctionManager()
+# class IsActiveManager(models.Manager):
+#     def get_queryset(self):
+#         return super(IsActiveManager, self).get_queryset().filter(active=True).order_by('-created_at')
 
 
 class BidManager(models.Manager):
@@ -42,15 +31,13 @@ class BidManager(models.Manager):
 
 
 class Bid(models.Model):
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
+    auction = models.OneToOneField(Auction, on_delete=models.CASCADE)
     value = models.FloatField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    def __str__(self):
-        return "{0} - {1}".format(self.auction, self.value)
+    # def __str__(self):
+    #     return "{0}".format(self.owner)
 
-    objects = models.Manager()
-    BidManager = BidManager()
-
-    
+    # objects = models.Manager()
+    # BidManager = BidManager()

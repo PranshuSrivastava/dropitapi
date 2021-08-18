@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 #All coustoumer/dropper registraion model with fields as username, email, phone_number, first_name, last_name
 class User(AbstractUser):
@@ -24,9 +25,17 @@ class UserProfile(models.Model):
     def __str__(self):
         return '{}'.format(self.user.username)
 
-    
+
+# To trigger userprofile model to create instant profile as dropper gets registereed
+@receiver(post_save, sender = settings.AUTH_USER_MODEL)
+def create_or_save_user_profile(sender, created, instance, **kwargs):
+    if created:
+        UserProfile.objects.create(user = instance)
+    instance.profile.save()
+
+
 #dropper profile model with fields as dropper_age, droper_gender, dropper_profile_photo, dropper_authentication_number
-#                                     dropper_authentication_photo, dropper_vehicle_type, dropper_rc_photo, dropper_driving_liscence_photo
+#dropper_authentication_photo, dropper_vehicle_type, dropper_rc_photo, dropper_driving_liscence_photo
 class DropperProfile(models.Model):
     dropper = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = 'dropper')
     dropper_age = models.IntegerField(null=False)
@@ -41,6 +50,12 @@ class DropperProfile(models.Model):
         return '{}'.format(self.dropper.username)
 
 
+# To trigger dropper profile model to create instant profile as dropper gets registereed
+@receiver(post_save, sender = settings.AUTH_USER_MODEL)
+def create_or_save_dropper_profile(sender, created, instance, **kwargs):
+    if created:
+        DropperProfile.objects.create(dropper = instance)
+    instance.profile.save()
 
 class OrdersModel(models.Model):
     parcel_choices = (

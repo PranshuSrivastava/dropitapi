@@ -3,20 +3,17 @@ from .models import *
 
 
 class AuctionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'current_bid_display', 'bid_count', 'expiry_date', 'active']
+    list_display = ['title', 'base_fare_display','created_at', 'expiry_date', 'active']
 
-    def current_bid_display(self, obj):
-        return "£{0}".format(obj.current_bid)
+    def base_fare_display(self, obj):
+        return "£{0}".format(obj.basic_fare)
 
 
 class BidAdmin(admin.ModelAdmin):
-    list_display = ['auction', 'value', 'owner', 'created_at']
-    list_filter = (
-        ('auction',)
-    )
-
+    list_display = ['value', 'owner', 'created_at']
+    # list_filter = (
+    #     ('auction',)
+    # )
 
 admin.site.register(Auction, AuctionAdmin)
 admin.site.register(Bid, BidAdmin)
-
-
