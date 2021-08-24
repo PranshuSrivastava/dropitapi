@@ -102,7 +102,9 @@ def get_dropper_profile(request, pk):
     if request.method == 'GET':
         dropper_serializer = DropperProfileSerializer(dropper_profile)
         user_serializer = UserSerializer(user)
-        response =dict(list((dropper_serializer.data).items( + list((dropper_serializer.data).items()))) + list((user_serializer.data).items()))
+        response =dict(list((dropper_serializer.data).items())) 
+        response2 =dict(list((user_serializer.data).items()))
+        response.update(response2)
         return Response(response)
 
     if request.method == 'PUT':
