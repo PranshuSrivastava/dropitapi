@@ -2,7 +2,6 @@ from .models import User, UserProfile ,DropperProfile, OrdersModel
 from rest_framework  import serializers
 from django.contrib.auth import authenticate
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

@@ -13,6 +13,9 @@ urlpatterns = [
     path('set-user-profile/', views.set_user_profile, name="set_user_profile"),
     path('dropper-profile/<str:pk>/', views.get_dropper_profile, name="dropper_profile"),
     path('set-dropper-profile/', views.set_dropper_profile, name="set_dropper_profile"),
+    path('get-order-list/', views.get_order_list, name="get_order_list"),
+    path('get-order-details/<str:pk>/', views.get_order_details, name="get_order_details"),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

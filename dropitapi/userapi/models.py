@@ -4,7 +4,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-#All coustoumer/dropper registraion model with fields as username, email, phone_number, first_name, last_name
+#All costumer/dropper registraion model with fields as username, email, phone_number, first_name, last_name
 class User(AbstractUser):
     username = models.CharField(blank = False, unique = True,max_length = 30)
     email = models.EmailField(unique = True, blank = True)
@@ -57,6 +57,25 @@ def create_or_save_dropper_profile(sender, created, instance, **kwargs):
         DropperProfile.objects.create(dropper = instance)
     instance.profile.save()
 
+class DropperRatingData(models.Model): 
+    dropper_name= models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = 'dropper_name', primary_key=True)
+    delivery_count = models.IntegerField(default=0)
+    dropper_rating = models.DecimalField(default=0, decimal_places=2,max_digits=10)
+    total_distance_covered = models.DecimalField(default=0, decimal_places=2,max_digits=10)
+    total_earnings = models.IntegerField(default = 0 )
+    total_time_on_road =  models.IntegerField(default=0)
+    def __str__(self):
+        return '{}'.format(self.dropper_name.username)
+
+
+@receiver(post_save, sender = settings.AUTH_USER_MODEL)
+def Dropper_rating_data(sender, created, instance, **kwargs):
+    if created:
+        DropperRatingData.objects.create(dropper_name = instance)
+    instance.profile.save()
+
+
+
 class OrdersModel(models.Model):
     parcel_choices = (
                      ("Food","Food"),
@@ -99,5 +118,3 @@ class OrdersModel(models.Model):
 
 
 #######################################################################################################################
-
-

@@ -5,5 +5,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('', include('userapi.urls')),
-    url('biding/', include('biddingapi.urls')),
+    url('bidding/', include('biddingapi.urls')),
 ]
