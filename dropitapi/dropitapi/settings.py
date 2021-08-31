@@ -140,3 +140,5 @@ AUTH_USER_MODEL = 'userapi.User'
 
 #$pip install pyrebase4
 #import pyrebase
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False

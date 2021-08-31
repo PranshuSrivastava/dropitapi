@@ -8,13 +8,17 @@ from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
 #userlist method to view all users at once with options as get and post
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @never_cache
 def get_user_list(request):
     if request.method == 'GET':
         user = User.objects.all()
         serializer = UserSerializer(user,many = True)
         return Response(serializer.data)
+
+@api_view(['POST'])
+@never_cache
+def create_user(request):
     if request.method == 'POST':
         serializer  = UserSerializer(data = request.data)
         if serializer.is_valid():
@@ -22,7 +26,6 @@ def get_user_list(request):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
-
 
 #userdetails method to view, put, delete specific users
 @api_view(['GET', 'PUT', 'DELETE','POST'])

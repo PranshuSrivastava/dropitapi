@@ -7,8 +7,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('update_active_bidding_orders/', views.update_active_bidding_orders, name="update_time"),
-    # path('update1/', views.update_active1, name="update_time"),
-    
     path('get_all_auctions/', views.get_all_auctions, name="get_all_aucions"),
     path('get_auction/<str:pk>/', views.get_auction, name="get_auction"),
     path('update_auction/<str:pk>/', views.update_auction, name="update_auction"),
